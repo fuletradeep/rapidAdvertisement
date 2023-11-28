@@ -11,7 +11,6 @@ const LoginController = (props) => {
   const auth = useSelector((state) => state.auth);
   const { onPressSigninButton } = useHomeModel();
 
-  console.log("render");
   return (
     <LoginView
       {...props}

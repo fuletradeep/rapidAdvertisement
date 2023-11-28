@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CryptoJS from "react-native-crypto-js";
 import { getAdvertisementList } from "@app/store/advertisement/advertisementSlice";
+import { logout } from "@app/store/auth/authSlice";
 
 global.Buffer = require('buffer').Buffer;
 
@@ -15,7 +16,12 @@ export function useAdvertisementModel() {
     dispatch(getAdvertisementList(ciphertext))
   }
 
+  const onLogoutPress = () => {
+    dispatch(logout())
+  }
+
   return{
-    getAddvertisement
+    getAddvertisement,
+    onLogoutPress
   }
 };

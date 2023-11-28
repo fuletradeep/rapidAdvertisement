@@ -6,12 +6,12 @@ import CryptoJS from "react-native-crypto-js";
 
 
 const AdvertisementController = () => {
-  const { getAddvertisement } = useAdvertisementModel();
+  const { getAddvertisement,onLogoutPress } = useAdvertisementModel();
   useEffect(() => {
     getAddvertisement()
   }, [])
   return (
-    <AdvertisementView />
+    <AdvertisementView onLogoutPress={onLogoutPress}/>
   )
 }
 

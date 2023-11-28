@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, Image, Pressable, AppState } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Swiper from "react-native-swiper";
 import ButtonFilled from "@app/components/common/ButtonFilled";
@@ -7,37 +7,78 @@ import R from "@app/res/R";
 
 const AdvertisementView = (props) => {
   const advertisementList = useSelector((state) => state.advertisement);
-  console.log("wwwwwwwww", advertisementList);
+  const appState = useRef(AppState.currentState);
   const [isButtonVisible, setIsButtonVisible] = useState(false);
+
 
   useEffect(() => {
     setTimeout(() => {
-      setIsButtonVisible(false)
-    }, 3000);
-  }, [isButtonVisible])
-  
+      setIsButtonVisible(false);
+    }, 30000);
+  }, [isButtonVisible]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (
+        nextAppState === 'inactive'
+      ) {
+        props?.onLogoutPress()
+        console.log('App has come to the foreground!');
+      }
+
+      appState.current = nextAppState;
+      console.log('AppState', appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const onSubmit = () => {
+    props?.onLogoutPress()
+  }
 
   return (
-    <TouchableOpacity style={{ flex: 1, backgroundColor: "transparent" }} onFocus={() => setIsButtonVisible(true)}>
-      {isButtonVisible && (
-        <View style={{ backgroundColor: "transparent" }}>
-          <ButtonFilled
-            title={"Logout"}
-            // onPress={onSubmit}
-            isShowLoader={props?.isLoading}
-            containerStyle={{
-              width: R.unit.scale(60),
-              height: R.unit.verticalScale(60),
-              justifyContent: "center",
-              alignItems: "center",
-              right: R.unit.verticalScale(10),
-              alignSelf: "flex-end",
+    <Pressable
+      style={{ flex: 1 }}
+      onHoverIn={() => {
+        console.log("444");
+        setIsButtonVisible(true);
+      }}
+    >
+      <Pressable
+        style={{ flex: 1 }}
+        onHoverIn={() => {
+          console.log("444");
+          setIsButtonVisible(true);
+        }}
+      >
+        {isButtonVisible && (
+          <View
+            style={{
+              backgroundColor: "transparent",
+              position: "absolute",
+              zIndex: 100000,
+              right: 0,
+              top: 20,
             }}
-          />
-        </View>
-      )}
-
-      <TouchableOpacity style={{ flex: 1, backgroundColor: "transparent" }} onFocus={() => setIsButtonVisible(true)}>
+          >
+            <ButtonFilled
+              title={"Logout"}
+              onPress={onSubmit}
+              isShowLoader={props?.isLoading}
+              containerStyle={{
+                width: R.unit.scale(60),
+                height: R.unit.verticalScale(60),
+                justifyContent: "center",
+                alignItems: "center",
+                right: R.unit.verticalScale(10),
+                alignSelf: "flex-end",
+              }}
+            />
+          </View>
+        )}
         <Swiper
           loop={true}
           autoplay={true}
@@ -61,15 +102,32 @@ const AdvertisementView = (props) => {
           {advertisementList?.advertisementList !== undefined &&
             advertisementList?.advertisementList?.map((ele) => {
               return (
-                <Image
-                  source={{ uri: ele?.AdsImage }}
-                  style={{ width: "100%", height: "100%", resizeMode: "cover" }}
-                />
+                <Pressable
+                  activeOpacity={1}
+                  style={{ flex: 1, backgroundColor: "transparent" }}
+                  onPress={() => {
+                    console.log("444");
+                    setIsButtonVisible(!isButtonVisible);
+                  }}
+                  onHoverIn={() => {
+                    console.log("444sdsd");
+                    setIsButtonVisible(true);
+                  }}
+                >
+                  <Image
+                    source={{ uri: ele?.AdsImage }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      resizeMode: "cover",
+                    }}
+                  />
+                </Pressable>
               );
             })}
         </Swiper>
-      </TouchableOpacity>
-    </TouchableOpacity>
+      </Pressable>
+    </Pressable>
   );
 };
 
