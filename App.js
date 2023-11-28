@@ -1,19 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { enableFreeze } from 'react-native-screens';
+import Navigation from './src';
+import R from '@app/res/R';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  enableFreeze(true);
+  return <Navigation />;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: R.color.black2,
     alignItems: 'center',
     justifyContent: 'center',
   },
