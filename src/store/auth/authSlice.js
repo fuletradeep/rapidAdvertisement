@@ -20,6 +20,7 @@ const initialState = {
   isLoadingRequest: false,
   requestLoader: '',
   user: undefined,
+  originalDbName:'',
   status: 'idle',
   error: undefined,
   authToken: '',
@@ -78,6 +79,10 @@ const authSlice = createSlice({
     setScannerType(state, action) {
       state.scannerType = action.payload;
     },
+    setStore(state, action) {
+      console.log('action.payload?.comCod',action.payload?.comCod,action.payload)
+      state.originalDbName = `RapidRMS${action.payload?.comCod}`;
+    },
     default : initialState
   },
   extraReducers: (builder) => {
@@ -90,13 +95,14 @@ const authSlice = createSlice({
       state.user = undefined;
     });
     builder.addCase(signIn.fulfilled, (state, action) => {
-      console.log("=====>>>", action.payload);
+      console.log("=====>>>", action.payload,action.payload.data?.store?.length,`RapidRMS${action.payload.data?.store?.comCod}`);
       if (action.payload.isError === 0) {
         state.status = 'succeeded';
         state.isAuthenticated = true;
         state.isLoadingRequest = false;
         state.requestLoader = 'login';
         state.user = action.payload.data;
+        state.originalDbName = action.payload.data?.store?.length > 1 ? '' : `RapidRMS${action.payload.data?.store[0]?.comCod}`
         state.authToken = action.payload.meta;
         state.justLogin = true;
         state.error = undefined;
@@ -132,7 +138,8 @@ export const {
   resetCountDownTimer,
   updateJustLoginState,
   updateGPSLocation,
-  setScannerType
+  setScannerType,
+  setStore
 } = authSlice.actions;
 
 export default authSlice.reducer;

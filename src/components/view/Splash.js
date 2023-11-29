@@ -5,7 +5,7 @@ import { ImageBackground, StatusBar, Text } from 'react-native';
 import { View } from '@gluestack-ui/themed';
 const Splash = () => {
   return (
-    <ImageBackground source={R.image.splash_bg()} style={R.style.container}>
+    <View  style={R.style.container}>
       <StatusBar
         translucent
         animated
@@ -15,11 +15,9 @@ const Splash = () => {
         hidden />
 
       <View flex={1} justifyContent={'center'} alignItems={'center'}>
-        <View paddingBottom={'40'}>
           <R.svg.logo />
-        </View>
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 

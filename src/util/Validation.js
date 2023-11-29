@@ -99,3 +99,17 @@ export const isEmpty = (data) => {
   }
   return true;
 };
+
+export const isVideoUrl = (url) =>  {
+  const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov']; // Add more if needed
+  const lowercasedUrl = url.toLowerCase();
+  
+  return videoExtensions.some(ext => lowercasedUrl.endsWith(ext));
+}
+
+export const isImageUrl = (url) =>  {
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']; // Add more if needed
+  const lowercasedUrl = url.toLowerCase();
+  
+  return imageExtensions.some(ext => lowercasedUrl.endsWith(ext));
+}

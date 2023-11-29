@@ -16,10 +16,6 @@ const LoginView = (props) => {
       setErrors({ username: "Email address is required" });
       return;
     }
-    if (!validateEmail(formData.username)) {
-      setErrors({ username: "Email address is invalid" });
-      return;
-    }
     if (!formData.password) {
       setErrors({ password: "Password is required" });
       return;

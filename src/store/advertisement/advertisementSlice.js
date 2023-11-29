@@ -32,10 +32,12 @@ export const getAdvertisementList = createAsyncThunk(
   }
 );
 
+
 const initialState = {
   isLoadingRequest: false,
   requestLoader: "",
-  advertisementList: undefined,
+  advertisementList: [],
+  originalDbName:'',
   status: "idle",
   error: undefined,
   countDownTime: 0,
@@ -83,9 +85,7 @@ const advertisementSlice = createSlice({
       state.lat = action.payload.lat;
       state.long = action.payload.long;
     },
-    setScannerType(state, action) {
-      state.scannerType = action.payload;
-    },
+   
     default: initialState,
   },
   extraReducers: (builder) => {
@@ -105,6 +105,7 @@ const advertisementSlice = createSlice({
         state.advertisementList = action.payload.data;
         state.justLogin = true;
         state.error = undefined;
+        
       } else {
         state.status = "failed";
         state.isLoadingRequest = false;
@@ -133,7 +134,6 @@ export const {
   resetCountDownTimer,
   updateJustLoginState,
   updateGPSLocation,
-  setScannerType,
 } = advertisementSlice.actions;
 
 export default advertisementSlice.reducer;

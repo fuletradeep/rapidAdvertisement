@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import AppStack from "./AppStack";
+import AuthStack from './AuthStack'
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { isReadyRef, navigationRef } from "./NavigationServices";
@@ -13,6 +14,8 @@ const Stack = createNativeStackNavigator();
 
 export default function MainNavigator({ theme }) {
   const auth = useSelector((state) => state.auth);
+
+  console.log('OOOOOOOOO---ooooooo',auth)
   //   const catalog = useSelector((state) => state.catalog);
 
   useEffect(() => {
@@ -25,7 +28,7 @@ export default function MainNavigator({ theme }) {
       ref={navigationRef}
       onReady={() => (isReadyRef.current = true)}
     >
-      {/* {!auth?.isAuthenticated ?
+      {!auth?.isAuthenticated ?
         (
           // NOT authenticated users rooting
           < AuthStack />
@@ -35,10 +38,10 @@ export default function MainNavigator({ theme }) {
           // Authenticated users rooting
           <AppStack />
         )
-      } */}
+      }
       {/* <AppStack /> */}
 
-      <Stack.Navigator>
+      {/* <Stack.Navigator>
         {!auth?.isAuthenticated ? (
           <Stack.Screen
             name={AppStackC.LOGIN_SCREEN}
@@ -58,7 +61,7 @@ export default function MainNavigator({ theme }) {
             })}
           />
         )}
-      </Stack.Navigator>
+      </Stack.Navigator> */}
     </NavigationContainer>
   );
 }

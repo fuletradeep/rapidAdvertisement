@@ -5,23 +5,28 @@ import CryptoJS from "react-native-crypto-js";
 import { getAdvertisementList } from "@app/store/advertisement/advertisementSlice";
 import { logout } from "@app/store/auth/authSlice";
 
-global.Buffer = require('buffer').Buffer;
+global.Buffer = require("buffer").Buffer;
 
 export function useAdvertisementModel() {
   const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
 
-  let ciphertext = CryptoJS.AES.encrypt('6PQN3NER39N9E8Y3M26XRY282Z', 'secret key 123').toString();
+  console.log(
+    "auth?.originalDbName",
+    `RapidRMS${auth?.user?.store[0]?.comCod}`,
+    auth?.originalDbName
+  );
 
   const getAddvertisement = () => {
-    dispatch(getAdvertisementList(ciphertext))
-  }
+    dispatch(getAdvertisementList(`RapidRMS${auth?.originalDbName}`));
+  };
 
   const onLogoutPress = () => {
-    dispatch(logout())
-  }
+    dispatch(logout());
+  };
 
-  return{
+  return {
     getAddvertisement,
-    onLogoutPress
-  }
-};
+    onLogoutPress,
+  };
+}

@@ -1,133 +1,87 @@
-import { View, Text, TouchableOpacity, Image, Pressable, AppState } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Pressable,
+  AppState,
+  Animated,
+  FlatList,
+  StatusBar,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Swiper from "react-native-swiper";
 import ButtonFilled from "@app/components/common/ButtonFilled";
 import R from "@app/res/R";
+import SideMenu from "@app/components/view/SideMenu";
+import { isVideoUrl } from "@app/util/Validation";
+import Video from "react-native-video";
 
+let timer = () => {};
 const AdvertisementView = (props) => {
+  StatusBar.setHidden(true);
   const advertisementList = useSelector((state) => state.advertisement);
   const appState = useRef(AppState.currentState);
+  const scrollX = useRef(new Animated.Value(0)).current;
   const [isButtonVisible, setIsButtonVisible] = useState(false);
-
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsButtonVisible(false);
-    }, 30000);
-  }, [isButtonVisible]);
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
-      if (
-        nextAppState === 'inactive'
-      ) {
-        props?.onLogoutPress()
-        console.log('App has come to the foreground!');
-      }
-
-      appState.current = nextAppState;
-      console.log('AppState', appState.current);
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  const onSubmit = () => {
-    props?.onLogoutPress()
-  }
+    if (advertisementList?.advertisementList?.length) {
+      const length = advertisementList?.advertisementList?.length;
+      setImage(advertisementList?.advertisementList[index]);
+      setImageUrl(advertisementList?.advertisementList[index].AdsImage);
+      timer = setTimeout(() => {
+        if (length - 1 !== index) {
+          setIndex((index) => index + 1);
+          clearTimeout(timer);
+        } else {
+          setIndex(0);
+          clearTimeout(timer);
+        }
+      }, Number(advertisementList?.advertisementList[index]?.Rotation) * 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [advertisementList?.advertisementList, index]);
 
   return (
-    <Pressable
-      style={{ flex: 1 }}
-      onHoverIn={() => {
-        console.log("444");
-        setIsButtonVisible(true);
-      }}
-    >
-      <Pressable
-        style={{ flex: 1 }}
-        onHoverIn={() => {
-          console.log("444");
-          setIsButtonVisible(true);
-        }}
-      >
-        {isButtonVisible && (
-          <View
-            style={{
-              backgroundColor: "transparent",
-              position: "absolute",
-              zIndex: 100000,
-              right: 0,
-              top: 20,
-            }}
+    <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        {isButtonVisible && <SideMenu {...props} />}
+        {advertisementList?.advertisementList !== undefined && (
+          <Pressable
+            style={{ flex: 1 }}
+            onPress={() => setIsButtonVisible(!isButtonVisible)}
           >
-            <ButtonFilled
-              title={"Logout"}
-              onPress={onSubmit}
-              isShowLoader={props?.isLoading}
-              containerStyle={{
-                width: R.unit.scale(60),
-                height: R.unit.verticalScale(60),
-                justifyContent: "center",
-                alignItems: "center",
-                right: R.unit.verticalScale(10),
-                alignSelf: "flex-end",
-              }}
-            />
-          </View>
-        )}
-        <Swiper
-          loop={true}
-          autoplay={true}
-          showsPagination={false}
-          StickyHeaderComponent={
-            <ButtonFilled
-              title={"Logout"}
-              // onPress={onSubmit}
-              isShowLoader={props?.isLoading}
-              containerStyle={{
-                width: R.unit.scale(60),
-                height: R.unit.verticalScale(60),
-                justifyContent: "center",
-                alignItems: "center",
-                right: R.unit.verticalScale(10),
-                alignSelf: "flex-end",
-              }}
-            />
-          }
-        >
-          {advertisementList?.advertisementList !== undefined &&
-            advertisementList?.advertisementList?.map((ele) => {
-              return (
-                <Pressable
-                  activeOpacity={1}
-                  style={{ flex: 1, backgroundColor: "transparent" }}
-                  onPress={() => {
-                    console.log("444");
-                    setIsButtonVisible(!isButtonVisible);
-                  }}
-                  onHoverIn={() => {
-                    console.log("444sdsd");
-                    setIsButtonVisible(true);
-                  }}
-                >
-                  <Image
-                    source={{ uri: ele?.AdsImage }}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      resizeMode: "cover",
-                    }}
+            {imageUrl && (
+              <View
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                {isVideoUrl(imageUrl) ? (
+                  <Video
+                    source={{ uri: imageUrl }} // the video file
+                    paused={false} // make it start
+                    style={{ width: "100%", height: "100%" }} // any style you want
+                    repeat={true} // make it a loop
                   />
-                </Pressable>
-              );
-            })}
-        </Swiper>
-      </Pressable>
-    </Pressable>
+                ) : (
+                  <Image
+                    source={{ uri: imageUrl }}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
+              </View>
+            )}
+          </Pressable>
+        )}
+      </View>
+    </View>
   );
 };
 
