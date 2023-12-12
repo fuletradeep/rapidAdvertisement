@@ -5,12 +5,15 @@ import { signIn } from '@app/store/auth/authSlice';
 
 export function useHomeModel() {
   const dispatch = useDispatch();
- 
+  const navigation = useNavigation();
 
   const onPressSigninButton = (data) => {
     //make api call
     // console.log("api called", data);
     dispatch(signIn(data));
+    setTimeout(() => {
+      navigation.navigate(AppStackC.ADVERTISEMENT_VIEW)
+    }, 1000);
     // dispatch(setStaticUser());
   };
 

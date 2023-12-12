@@ -1,4 +1,4 @@
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, Keyboard } from "react-native";
 import React, { useEffect, useState } from "react";
 import R from "@app/res/R";
 import { HStack, VStack } from "@gluestack-ui/themed";
@@ -12,6 +12,7 @@ const LoginView = (props) => {
   const [errors, setErrors] = useState({});
 
   const onSubmit = () => {
+    Keyboard.dismiss()
     if (!formData.username) {
       setErrors({ username: "Email address is required" });
       return;

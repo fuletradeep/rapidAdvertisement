@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient, { axiosMD } from "@app/package/axios/axios";
 import axios from "axios";
+import { demo } from "@app/res/video";
+import R from "@app/res/R";
 
 export const getAdvertisementList = createAsyncThunk(
   "advertisement/getAdvertisementList",
@@ -19,7 +21,10 @@ export const getAdvertisementList = createAsyncThunk(
           headers: headers,
         }
       );
-      return {isError:0,data:JSON.parse(response?.data?.DiviceAdsInfoResult?.Data)};
+      return {
+        isError: 0,
+        data: JSON.parse(response?.data?.DiviceAdsInfoResult?.Data),
+      };
     } catch (err) {
       console.log(" advertisement/getAdvertisementList error ", err);
       return {
@@ -32,12 +37,11 @@ export const getAdvertisementList = createAsyncThunk(
   }
 );
 
-
 const initialState = {
   isLoadingRequest: false,
   requestLoader: "",
   advertisementList: [],
-  originalDbName:'',
+  originalDbName: "",
   status: "idle",
   error: undefined,
   countDownTime: 0,
@@ -85,7 +89,40 @@ const advertisementSlice = createSlice({
       state.lat = action.payload.lat;
       state.long = action.payload.long;
     },
-   
+    getOfflineAdvertisement(state, action) {
+      console.log('xxxxxxxxxxxxxx')
+      state.advertisementList = {
+        advertisementList: [
+          {
+            AdId: 20197,
+            AdsImage: R.video.demo(),
+            DefualtHalfURL: null,
+            EndDate: "/Date(1701648000000)/",
+            ImageType: "Video",
+            IsDeleted: false,
+            ItemName: "",
+            Rotation: 120,
+            StartDate: "/Date(1701648000000)/",
+            Tag: null,
+            TimeStatus: "Continuously",
+            UPC: null,
+            isVerified: false,
+          },
+        ],
+        countDownTime: 0,
+        error: undefined,
+        isLoadingRequest: false,
+        isNewUser: false,
+        justLogin: true,
+        lat: 0,
+        long: 0,
+        originalDbName: "",
+        requestLoader: "advertisement",
+        scannerType: "qr",
+        status: "succeeded",
+      };
+    },
+
     default: initialState,
   },
   extraReducers: (builder) => {
@@ -97,7 +134,7 @@ const advertisementSlice = createSlice({
       state.advertisementList = undefined;
     });
     builder.addCase(getAdvertisementList.fulfilled, (state, action) => {
-    //   console.log("=====>>>", action.payload);
+      console.log("=====>>>", action.payload);
       if (action.payload.isError === 0) {
         state.status = "succeeded";
         state.isLoadingRequest = false;
@@ -105,7 +142,6 @@ const advertisementSlice = createSlice({
         state.advertisementList = action.payload.data;
         state.justLogin = true;
         state.error = undefined;
-        
       } else {
         state.status = "failed";
         state.isLoadingRequest = false;
@@ -134,6 +170,7 @@ export const {
   resetCountDownTimer,
   updateJustLoginState,
   updateGPSLocation,
+  getOfflineAdvertisement,
 } = advertisementSlice.actions;
 
 export default advertisementSlice.reducer;

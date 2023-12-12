@@ -5,6 +5,7 @@ import svg from './svg';
 import style from './style';
 import unit from './unit';
 import strings from './string';
+import video from './video'
 
 const R = {
   color,
@@ -14,7 +15,7 @@ const R = {
   style,
   unit,
   strings,
-  
+  video
 };
 
 export default R;

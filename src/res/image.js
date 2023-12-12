@@ -1,5 +1,5 @@
 const image = {
-  logo: () => require('./images/card_bottom.png'),
+  logo: () => require('./images/logo.png'),
   home_bg: () => require('./images/home_background/home_bg1.jpg'),
   profile: () => require('./images/profile/profile.jpg'),
   home_menu_vector: () => require('./images/home_menu_vector.png'),
@@ -9,6 +9,7 @@ const image = {
   success_green: () => require('./images/success_green.png'),
   splash_bg: () => require('./images/splash_bg.png'),
   fail_red: () => require('./images/fail_red.png'),
+  loading: () => require('./images/loading.gif')
 };
 
 export default image;

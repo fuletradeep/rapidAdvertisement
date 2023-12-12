@@ -28,7 +28,7 @@ export default function MainNavigator({ theme }) {
       ref={navigationRef}
       onReady={() => (isReadyRef.current = true)}
     >
-      {!auth?.isAuthenticated ?
+      {/* {!auth?.isAuthenticated ?
         (
           // NOT authenticated users rooting
           < AuthStack />
@@ -38,8 +38,8 @@ export default function MainNavigator({ theme }) {
           // Authenticated users rooting
           <AppStack />
         )
-      }
-      {/* <AppStack /> */}
+      } */}
+      <AppStack />
 
       {/* <Stack.Navigator>
         {!auth?.isAuthenticated ? (

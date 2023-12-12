@@ -37,6 +37,14 @@ const AppStack = () => {
         headerShown: false,
       })}
     />
+    <Stack.Screen
+      name={AppStackC.LOGIN_SCREEN}
+      component={LoginController}
+      options={() => ({
+        title: AppStackC.LOGIN_SCREEN,
+        headerShown: false,
+      })}
+    />
   </Stack.Navigator>
 }
 
